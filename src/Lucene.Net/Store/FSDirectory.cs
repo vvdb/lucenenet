@@ -507,6 +507,7 @@ namespace Lucene.Net.Store
                         finally
                         {
                             isOpen = false;
+							file.Flush(true);
                             IOUtils.CloseWhileHandlingException(priorE, file);
                         }
                     }
@@ -531,8 +532,8 @@ namespace Lucene.Net.Store
         }
 
         protected virtual void Fsync(string name)
-        {
-            IOUtils.Fsync(Path.Combine(m_directory.FullName, name), false);            
+        {		
+            //IOUtils.Fsync(Path.Combine(m_directory.FullName, name), false);            
         }
     }
 }
