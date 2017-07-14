@@ -142,7 +142,7 @@ namespace Lucene.Net.Codecs.BlockTerms
             {
                 if (!success)
                 {
-                    IOUtils.CloseWhileHandlingException(input);
+                    IOUtils.DisposeWhileHandlingException(input);
                 }
                 if (indexDivisor > 0)
                 {
@@ -327,7 +327,7 @@ namespace Lucene.Net.Codecs.BlockTerms
                     int numIndexTerms)
                 {
                     this.termsStart = termsStart;
-                    termBytesStart = outerInstance.outerInstance.termBytes.Pointer;
+                    termBytesStart = outerInstance.outerInstance.termBytes.GetPointer();
 
                     IndexInput clone = (IndexInput)outerInstance.outerInstance.input.Clone();
                     clone.Seek(indexStart);

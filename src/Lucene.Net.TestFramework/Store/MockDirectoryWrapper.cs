@@ -1008,7 +1008,7 @@ namespace Lucene.Net.Store
 
                                         try
                                         {
-                                            ISet<string> ghosts = new HashSet<string>(sis.Files(m_input, false));
+                                            ISet<string> ghosts = new HashSet<string>(sis.GetFiles(m_input, false));
                                             foreach (string s in ghosts)
                                             {
                                                 if (endSet.Contains(s) && !startSet.Contains(s))
@@ -1345,7 +1345,6 @@ namespace Lucene.Net.Store
             private IndexInputSlicer DelegateHandle;
 
             public IndexInputSlicerAnonymousInnerClassHelper(MockDirectoryWrapper outerInstance, string name, IndexInputSlicer delegateHandle)
-                : base(outerInstance)
             {
                 this.OuterInstance = outerInstance;
                 this.Name = name;
@@ -1446,8 +1445,8 @@ namespace Lucene.Net.Store
         }
 
         /// <summary>
-        /// Use this when throwing fake {@codeSystem.IO.IOException},
-        ///  e.g. from <seealso cref="MockDirectoryWrapper.Failure"/>.
+        /// Use this when throwing fake <see cref="System.IO.IOException"/>,
+        /// e.g. from <see cref="MockDirectoryWrapper.Failure"/>.
         /// </summary>
         public class FakeIOException : System.IO.IOException
         {

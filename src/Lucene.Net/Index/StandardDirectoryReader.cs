@@ -87,7 +87,7 @@ namespace Lucene.Net.Index
                     {
                         if (!success)
                         {
-                            IOUtils.CloseWhileHandlingException(prior, readers);
+                            IOUtils.DisposeWhileHandlingException(prior, readers);
                         }
                     }
                 }
@@ -525,7 +525,7 @@ namespace Lucene.Net.Index
                 segmentsFileName = infos.GetSegmentsFileName();
                 this.dir = dir;
                 userData = infos.UserData;
-                files = infos.Files(dir, true);
+                files = infos.GetFiles(dir, true);
                 generation = infos.Generation;
                 segmentCount = infos.Count;
             }

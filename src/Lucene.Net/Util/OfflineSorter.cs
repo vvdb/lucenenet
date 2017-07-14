@@ -141,11 +141,6 @@ namespace Lucene.Net.Util
         /// </summary>
         public class SortInfo
         {
-            internal virtual void InitializeInstanceFields()
-            {
-                BufferSize = outerInstance.ramBufferSize.bytes;
-            }
-
             private readonly OfflineSorter outerInstance;
 
             /// <summary>
@@ -171,7 +166,7 @@ namespace Lucene.Net.Util
             public long ReadTime { get; set; }
             /// <summary>
             /// Read buffer size (in bytes) </summary>
-            public long BufferSize { get; set; } // LUCENENET TODO: API - make setter private
+            public long BufferSize { get; private set; }
 
             /// <summary>
             /// Create a new <see cref="SortInfo"/> (with empty statistics) for debugging. </summary>
@@ -179,7 +174,7 @@ namespace Lucene.Net.Util
             {
                 this.outerInstance = outerInstance;
 
-                InitializeInstanceFields();
+                BufferSize = outerInstance.ramBufferSize.bytes;
             }
 
             /// <summary>
@@ -256,9 +251,7 @@ namespace Lucene.Net.Util
         {
             sortInfo = new SortInfo(this) { TotalTime = Environment.TickCount };
 
-            // LUCENENET NOTE: Can't do this because another thread could recreate the file before we are done here.
-            // and cause this to bomb. We use the existence of the file as an indicator that we are done using it.
-            //output.Delete(); // LUCENENET TODO: BUG: Put this back in (we now have thread-safe file creation, so this should be like the original).
+            output.Delete();
 
             var merges = new List<FileInfo>();
             bool success2 = false;
@@ -301,11 +294,11 @@ namespace Lucene.Net.Util
                 {
                     if (success)
                     {
-                        IOUtils.Close(inputStream);
+                        IOUtils.Dispose(inputStream);
                     }
                     else
                     {
-                        IOUtils.CloseWhileHandlingException(inputStream);
+                        IOUtils.DisposeWhileHandlingException(inputStream);
                     }
                 }
 
@@ -447,11 +440,11 @@ namespace Lucene.Net.Util
                 // happening in closing streams.
                 try
                 {
-                    IOUtils.Close(streams);
+                    IOUtils.Dispose(streams);
                 }
                 finally
                 {
-                    IOUtils.Close(@out);
+                    IOUtils.Dispose(@out);
                 }
             }
         }

@@ -71,7 +71,7 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
 
             validate(dirs[0], dirs[1], map);
 
-            IOUtils.Close(dirs);
+            IOUtils.Dispose(dirs);
         }
 
         private class ThreadAnonymousInnerClassHelper : ThreadClass
@@ -123,12 +123,10 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
 
         private void validate(Directory dest, Directory src, IOrdinalMap ordMap)
         {
-            var destTr = new DirectoryTaxonomyReader(dest);
-            try
+            using (var destTr = new DirectoryTaxonomyReader(dest))
             {
                 int destSize = destTr.Count;
-                var srcTR = new DirectoryTaxonomyReader(src);
-                try
+                using (var srcTR = new DirectoryTaxonomyReader(src))
                 {
                     var map = ordMap.GetMap();
 
@@ -146,14 +144,6 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
                         Assert.AreEqual(destOrdinal, map[j]);
                     }
                 }
-                finally
-                {
-                    ((TaxonomyReader)srcTR).Dispose(true);
-                }
-            }
-            finally
-            {
-                ((TaxonomyReader)destTr).Dispose(true);
             }
         }
 
@@ -175,7 +165,7 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
 
             validate(dest, src, map);
 
-            IOUtils.Close(dest, src);
+            IOUtils.Dispose(dest, src);
         }
 
         [Test]
@@ -196,7 +186,7 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
 
             validate(dest, src, map);
 
-            IOUtils.Close(dest, src);
+            IOUtils.Dispose(dest, src);
         }
 
         // A more comprehensive and big random test.
@@ -242,7 +232,7 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
 
             validate(dest, src, map);
 
-            IOUtils.Close(dest, src);
+            IOUtils.Dispose(dest, src);
         }
 
         [Test]
@@ -285,7 +275,7 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
             }
             dtr.Dispose();
 
-            IOUtils.Close(src, dest);
+            IOUtils.Dispose(src, dest);
         }
 
         private class ThreadAnonymousInnerClassHelper2 : ThreadClass

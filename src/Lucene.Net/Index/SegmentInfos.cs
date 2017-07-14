@@ -447,7 +447,7 @@ namespace Lucene.Net.Index
                     // Clear any segment infos we had loaded so we
                     // have a clean slate on retry:
                     this.Clear();
-                    IOUtils.CloseWhileHandlingException(input);
+                    IOUtils.DisposeWhileHandlingException(input);
                 }
                 else
                 {
@@ -584,7 +584,7 @@ namespace Lucene.Net.Index
                 {
                     // We hit an exception above; try to close the file
                     // but suppress any exception:
-                    IOUtils.CloseWhileHandlingException(segnOutput);
+                    IOUtils.DisposeWhileHandlingException(segnOutput);
 
                     foreach (string fileName in upgradedSIFiles)
                     {
@@ -634,7 +634,7 @@ namespace Lucene.Net.Index
             {
                 if (@in != null)
                 {
-                    IOUtils.CloseWhileHandlingException(@in);
+                    IOUtils.DisposeWhileHandlingException(@in);
                 }
             }
             return false;
@@ -678,7 +678,7 @@ namespace Lucene.Net.Index
             {
                 if (!success)
                 {
-                    IOUtils.CloseWhileHandlingException(output);
+                    IOUtils.DisposeWhileHandlingException(output);
                     try
                     {
                         si.Dir.DeleteFile(fileName);
@@ -1118,7 +1118,7 @@ namespace Lucene.Net.Index
             {
                 // Suppress so we keep throwing the original exception
                 // in our caller
-                IOUtils.CloseWhileHandlingException(pendingSegnOutput);
+                IOUtils.DisposeWhileHandlingException(pendingSegnOutput);
                 pendingSegnOutput = null;
 
                 // Must carefully compute fileName from "generation"
@@ -1157,7 +1157,7 @@ namespace Lucene.Net.Index
         /// The returned collection is recomputed on each
         /// invocation.
         /// </summary>
-        public ICollection<string> Files(Directory dir, bool includeSegmentsFile) // LUCENENET TODO: API Rename GetFiles()
+        public ICollection<string> GetFiles(Directory dir, bool includeSegmentsFile)
         {
             var files = new HashSet<string>();
             if (includeSegmentsFile)
@@ -1175,7 +1175,7 @@ namespace Lucene.Net.Index
                 Debug.Assert(info.Info.Dir == dir);
                 if (info.Info.Dir == dir)
                 {
-                    files.UnionWith(info.Files());
+                    files.UnionWith(info.GetFiles());
                 }
             }
 

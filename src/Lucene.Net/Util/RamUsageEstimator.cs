@@ -349,7 +349,29 @@ namespace Lucene.Net.Util
             return AlignObjectSize((long)NUM_BYTES_ARRAY_HEADER + (long)NUM_BYTES_DOUBLE * arr.Length);
         }
 
-        // LUCENENET TODO: API - Add SizeOf() overloads for ulong, ushort, uint
+        /// <summary>
+        /// Returns the size in bytes of the <see cref="T:ulong[]"/> object. </summary>
+        [CLSCompliant(false)]
+        public static long SizeOf(ulong[] arr)
+        {
+            return AlignObjectSize((long)NUM_BYTES_ARRAY_HEADER + (long)NUM_BYTES_INT64 * arr.Length);
+        }
+
+        /// <summary>
+        /// Returns the size in bytes of the <see cref="T:uint[]"/> object. </summary>
+        [CLSCompliant(false)]
+        public static long SizeOf(uint[] arr)
+        {
+            return AlignObjectSize((long)NUM_BYTES_ARRAY_HEADER + (long)NUM_BYTES_INT32 * arr.Length);
+        }
+
+        /// <summary>
+        /// Returns the size in bytes of the <see cref="T:ushort[]"/> object. </summary>
+        [CLSCompliant(false)]
+        public static long SizeOf(ushort[] arr)
+        {
+            return AlignObjectSize((long)NUM_BYTES_ARRAY_HEADER + (long)NUM_BYTES_INT16 * arr.Length);
+        }
 
         /// <summary>
         /// Estimates the RAM usage by the given object. It will
@@ -675,7 +697,7 @@ namespace Lucene.Net.Util
         /// <para/>
         /// TODO: If this is useful outside this class, make it public - needs some work
         /// </summary>
-        public sealed class IdentityHashSet<KType> : IEnumerable<KType> // LUCENENET TODO: API - This was internal in Lucene
+        internal sealed class IdentityHashSet<KType> : IEnumerable<KType>
         {
             /// <summary>
             /// Default load factor.
@@ -901,9 +923,7 @@ namespace Lucene.Net.Util
                 get { return Assigned; }
             }
 
-            // LUCENENET TODO: API - bring back this IsEmpty property (doesn't work the same as !Any())
-
-            //public bool Empty // LUCENENET NOTE: in .NET we can just use !Any() on IEnumerable<T>
+            //public bool IsEmpty // LUCENENET NOTE: in .NET we can just use !Any() on IEnumerable<T>
             //{
             //    get
             //    {

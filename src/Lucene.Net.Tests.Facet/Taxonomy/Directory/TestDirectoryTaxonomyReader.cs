@@ -101,7 +101,7 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
             }
             finally
             {
-                IOUtils.Close(ltw, ltr, dir);
+                IOUtils.Dispose(ltw, ltr, dir);
             }
         }
 
@@ -178,14 +178,14 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
                     tw.Dispose();
                     if (closeReader)
                     {
-                        tr.Dispose(true);
+                        tr.Dispose();
                         tr = new DirectoryTaxonomyReader(dir);
                     }
                     else
                     {
                         var newtr = TaxonomyReader.OpenIfChanged(tr);
                         Assert.NotNull(newtr);
-                        tr.Dispose(true);
+                        tr.Dispose();
                         tr = newtr;
                     }
                     Assert.AreEqual(baseNumCategories + 1 + k, tr.Count, "Wrong #categories in taxonomy (i=" + i + ", k=" + k + ")");
@@ -193,7 +193,7 @@ namespace Lucene.Net.Facet.Taxonomy.Directory
             }
             finally
             {
-                IOUtils.Close(tr as DirectoryTaxonomyReader, tw, dir);
+                IOUtils.Dispose(tr as DirectoryTaxonomyReader, tw, dir);
             }
         }
 
